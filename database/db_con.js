@@ -39,12 +39,22 @@ class Connection{
         const { DataTypes } = require('sequelize')
 
         //vinculamos los modelos a la base de datos
-        //connection.Propietario = require("../models/Propietario")(connection.init,DataTypes)
+        connection.Usuario = require("../models/Usuario")(connection.init,DataTypes)
+        connection.Publicacion = require("../models/Publicacion")(connection.init,DataTypes)
+        connection.Valoracion = require("../models/Valoracion")(connection.init,DataTypes)
+        connection.Comentario = require("../models/comentario")(connection.init,DataTypes)
+        connection.Etiqueta = require("../models/Etiqueta")(connection.init,DataTypes)
+        connection.Imagen = require("../models/Imagen")(connection.init,DataTypes)
         
 
 
         //asociar los modelos
-        //connection.Propietario.associate(connection)
+        connection.Usuario.associate(connection)
+        connection.Publicacion.associate(connection)
+        connection.Valoracion.associate(connection)
+        connection.Comentario.associate(connection)
+        connection.Etiqueta.associate(connection)
+        connection.Imagen.associate(connection)
         
         
         return connection
