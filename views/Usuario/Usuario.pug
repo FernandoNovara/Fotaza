@@ -1,0 +1,54 @@
+doctype html
+html(lang="en")
+    include ../Modulo/head.pug
+    body 
+        include ../Modulo/header.pug
+
+        include ../Modulo/main.pug
+
+            h1 Inicio de Usuario
+            br
+            p
+                a(class="btn btn-success",href=("/Usuario/Create")) Ingresar un nuevo Usuario
+            table(class="table")
+                thead
+                    tr
+                        th Cod. Usuario
+                        th Nombre
+                        th Apellido
+                        th Email
+                        th Clave
+                        th Telefono
+                        th Fecha Nacimiento
+                        th Interes
+                        th Ciudad
+                        th Avatar
+                        th acciones
+                tbody
+                    if allUsuario
+                        for val in allUsuario
+                            tr
+                                td= val.id
+                                td= val.Nombre
+                                td= val.Apellido
+                                td= val.Email
+                                td= val.Clave
+                                td= val.Telefono
+                                td= val.Fecha_Nac
+                                td= val.Interes
+                                td= val.Ciudad
+                                td= val.Avatar
+                                td
+                                    img(src=`/${val.Avatar}` class="imagen")
+                                td= val.Rol
+                                td
+                                    a(class="btn btn-warning",href=(`/Usuario/Update/${val.id}`),title="Editar",style="margin-right: 2px;")
+                                        i(class="fas fa-pencil-alt")
+
+                                    a(class="btn btn-info",href=(`/Usuario/Details/${val.id}`),title="Detalles",style="margin-right: 2px;")
+                                        i(class="fas fa-book")
+
+                                    a(class="btn btn-danger",href=(`/Usuario/Delete?id=${val.id}`),title="Eliminar",style="margin-right: 2px;")
+                                        i(class="fas fa-trash-alt")
+
+    include ../Modulo/footer.pug
