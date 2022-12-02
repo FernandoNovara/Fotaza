@@ -5,11 +5,11 @@ module.exports = (sequelize, DataTypes) => {
   class Publicacion extends Model {
 
     static associate(models) {
-      Publicacion.belongsTo(models.Imagen)
-      Publicacion.belongsTo(models.Usuario)
-      Publicacion.hasOne(models.Valoracion, {as: "Valoraciones_publicacion", foreignKey: "publicacion_id"})
-      Publicacion.hasMany(models.Comentario, {as: "Comentario_publicacion", foreignKey: "publicacion_id"})
-      Publicacion.hasMany(models.Etiqueta, {as: "Etiqueta_publicacion", foreignKey: "publicacion_id"})
+      Publicacion.belongsTo(models.Imagen, {as:"Imagenes" , foreignKey: "imagen_id", onDelete: "CASCADE"})
+      Publicacion.belongsTo(models.Usuario, {as:"Usuario"})
+      Publicacion.hasOne(models.Valoracion, {as: "Valoraciones", foreignKey: "publicacion_id" , onDelete: "CASCADE"})
+      Publicacion.hasMany(models.Comentario, {as: "Comentario", foreignKey: "publicacion_id" , onDelete: "CASCADE"})
+      Publicacion.hasMany(models.Etiqueta, {as: "Etiquetas", foreignKey: "publicacion_id" , onDelete: "CASCADE"})
 
     }
   }

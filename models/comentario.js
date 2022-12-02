@@ -6,7 +6,7 @@ module.exports = (sequelize, DataTypes) => {
 
     static associate(models) {
       Comentario.belongsTo(models.Usuario)
-      Comentario.belongsTo(models.Publicacion)
+      Comentario.belongsTo(models.Publicacion, {foreignKey: "publicacion_id"})
     }
   }
   Comentario.init({

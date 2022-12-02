@@ -6,7 +6,7 @@ module.exports = (sequelize, DataTypes) => {
   class Imagen extends Model {
     static associate(models) {
       Imagen.belongsTo(models.Usuario)
-      Imagen.hasOne(models.Publicacion ,{as: "Publicaciones",foreignKey: "imagen_id"})
+      Imagen.hasOne(models.Publicacion ,{as: "Post",foreignKey: "imagen_id" , onDelete: "CASCADE"})
     }
   }
   Imagen.init({

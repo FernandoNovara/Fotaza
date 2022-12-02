@@ -9,7 +9,7 @@ module.exports = (sequelize, DataTypes) => {
         Usuario.hasMany(models.Imagen ,{as: "Imagenes", foreignKey: "usuario_id"})
         Usuario.hasMany(models.Comentario ,{as: "Comentarios", foreignKey: "usuario_id"})
         Usuario.hasOne(models.Valoracion, {as:"valoraciones",foreignKey: "usuario_id"})
-        Usuario.hasMany(models.Publicacion, {as: "Publicacion_Usuario",foreignKey: "usuario_id"})
+        Usuario.hasMany(models.Publicacion, {as: "Publicaciones",foreignKey: "usuario_id"})
     }
   }
   Usuario.init({
