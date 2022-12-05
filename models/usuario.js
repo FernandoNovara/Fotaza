@@ -15,20 +15,20 @@ module.exports = (sequelize, DataTypes) => {
   Usuario.init({
     Nombre: {
       type: DataTypes.STRING(100),
-      allowNull: true
+      allowNull: false
     },
     Apellido: {
       type: DataTypes.STRING(100),
-      allowNull: true
+      allowNull: false
     },
     Email: {
       type: DataTypes.STRING(100),
-      allowNull: true,
+      allowNull: false,
       unique: true
     },
     Clave: {
       type: DataTypes.STRING(100),
-      allowNull: true
+      allowNull: false
     },
     Telefono: {
       type: DataTypes.STRING(100),
@@ -40,15 +40,15 @@ module.exports = (sequelize, DataTypes) => {
     },
     Interes: {
       type: DataTypes.STRING(200),
-      allowNull: false
+      allowNull: true
     },
     Ciudad: {
       type: DataTypes.STRING(100),
-      allowNull: false
+      allowNull: true
     },
     Avatar: {
       type: DataTypes.STRING(100),
-      allowNull: false
+      allowNull: true
     },
   }, {
     sequelize,

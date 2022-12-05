@@ -1,0 +1,28 @@
+div(class="modal" id="myModal")
+    <div class="modal-dialog modal-xl ">
+            div(class="modal-content bg-dark")
+                div(class="container")
+                    div(class="row")
+                        div(class="col-sm-6")
+                            div(class="modal-body")
+                                img(class="modal-content" id="img_modal")
+                            div(class="d-flex flex-column align-items-center" style="margin-top: 20px;") 
+                                h6(class="font-weight-bold text-light p-2 ")="titulo"
+                                h6(class="font-weight-bold text-light p-2 ")="Valoraciones"
+
+                        div(class="col-sm-6")
+                            div(class="container")
+                                div(class="d-flex bg-light" id="Comentarios")
+                                    img(src="/img/perfil.jpg", alt="" id="img-Comentarios" class="p-2" )
+                                    div(class="comentario-contenido")="Comentarios" 
+                                    div(class="comentario-contenido")="Otros Comentarios"
+
+                                form(class="d-flex form-inline position-relative my-2 d-inline-block")
+                                    textarea(name="", cols="30", rows="2" class="form-control" id="campo-comentario" style="margin-right: 2px;")
+                                    button(type="submit" class="btn btn-success")="Comentar" 
+
+
+
+                                        
+                        div(class="modal-footer")
+                                button(type="button" class="btn btn-success" data-bs-dismiss="modal")="Cerrar"

@@ -2,9 +2,6 @@ doctype html
 html(lang="en")
     include ../Modulo/head.pug
     body 
-        include ../Modulo/header.pug
-
-        include ../Modulo/main.pug
 
             h1 Inicio de Usuario
             br
@@ -50,5 +47,3 @@ html(lang="en")
 
                                     a(class="btn btn-danger",href=(`/Usuario/Delete?id=${val.id}`),title="Eliminar",style="margin-right: 2px;")
                                         i(class="fas fa-trash-alt")
-
-    include ../Modulo/footer.pug
