@@ -9,15 +9,15 @@ module.exports = {
         try {
             const comentario = await dbConfig.Comentario.create(
                 {
-                    Fecha: req.body.Fecha,
+                    Fecha: Date.now(),
                     Descripcion: req.body.Descripcion,  
                     publicacion_id: req.body.publicacion_id,
-                    usuario_id: req.body.usuario_id
+                    usuario_id: req.Usuario.id
                 }
             )
 
             if(comentario)
-                res.json(comentario)
+            res.redirect(`/Publicacion/showOne/${req.body.publicacion_id}`)
             else
                 res.json("No se pudo crear el comentario")
         } catch (error) {

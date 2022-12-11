@@ -2,48 +2,117 @@ doctype html
 html(lang="en")
     include ../Modulo/head.pug
     body 
+        div(class="d-flex")
+            div(id="sidebar-container" class="bg-dark")
+                div(class="px-lg-5 py-lg-4 p-3 ")
+                    a(href="/Home") 
+                        img(src="../img/Logo.png" id="Logo" class="img-fluid")
 
-            h1 Inicio de Usuario
-            br
-            p
-                a(class="btn btn-success",href=("/Usuario/Create")) Ingresar un nuevo Usuario
-            table(class="table")
-                thead
-                    tr
-                        th Cod. Usuario
-                        th Nombre
-                        th Apellido
-                        th Email
-                        th Clave
-                        th Telefono
-                        th Fecha Nacimiento
-                        th Interes
-                        th Ciudad
-                        th Avatar
-                        th acciones
-                tbody
-                    if allUsuario
-                        for val in allUsuario
-                            tr
-                                td= val.id
-                                td= val.Nombre
-                                td= val.Apellido
-                                td= val.Email
-                                td= val.Clave
-                                td= val.Telefono
-                                td= val.Fecha_Nac
-                                td= val.Interes
-                                td= val.Ciudad
-                                td= val.Avatar
-                                td
-                                    img(src=`/${val.Avatar}` class="imagen")
-                                td= val.Rol
-                                td
-                                    a(class="btn btn-warning",href=(`/Usuario/Update/${val.id}`),title="Editar",style="margin-right: 2px;")
-                                        i(class="fas fa-pencil-alt")
+                div(class="menu")
+                    br
+                    a(class="d-block  btn btn-dark text-light p-3",href="/Home")
+                        i(class="fas fa-home mr-2 lead")  
+                        = " Home"
 
-                                    a(class="btn btn-info",href=(`/Usuario/Details/${val.id}`),title="Detalles",style="margin-right: 2px;")
-                                        i(class="fas fa-book")
+                    a(class="d-block   btn btn-dark text-light p-3",href="/Usuario")
+                        i(class="fas fa-user mr-2 lead")  
+                        = " Perfil"
 
-                                    a(class="btn btn-danger",href=(`/Usuario/Delete?id=${val.id}`),title="Eliminar",style="margin-right: 2px;")
-                                        i(class="fas fa-trash-alt")
+                    a(class=" btn btn-dark  d-block text-light p-3",href=("/Publicacion/Create")) 
+                        i(class="fas fa-upload mr-2 lead")  
+                        span(class="font-weight-bold")= " Subir una Imagen"
+
+
+            div(class="w-100")   
+                nav(class="navbar navbar-expand-sm navbar-light " id="navbar")
+                    div(class="container")
+                        form(class="d-flex form-inline position-relative my-2 d-inline-block")
+                            input(class="form-control" style="width: 400px; margin-left: 300px;" type="search" placeholder="Buscar" aria-label="Buscar")
+                            button(class="btn btn-success" style="margin-left: 4px; " type="submit")
+                                i(class="fas fa-search")
+
+                        div
+                            div(class="dropdown")
+                                button(class="btn btn-secondary dropdown-toggle" href="#" type="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false")
+                                    img(src="../img/Perfil.jpg" id="img-perfil" alt="")
+                                    = " Fernando Novara"
+
+                                ul(class="dropdown-menu" aria-labelledby="dropdownMenuLink")
+                                    li
+                                        a(class="dropdown-item" href="#")="Configuracion"
+                                    li
+                                        a(class="dropdown-item" href="/Salir")="Cerrar sesion"
+                div(id="content" )
+                    div(class=" row container p-2")
+                        div(class="col-sm-6")
+                            div(class="align-self-center")
+                                div(class="container bg-dark")
+                                    h1(class="text-light font-weight-bold")= "Datos Personales"
+                                    form(action="" method="POST")
+
+                                        div(class="mb-4")
+                                            img(src="/img/28.jpg" id="ImgPerfil" alt="")
+                                            //- input(type="file" id="archivo"  name="" class="form-control bg-dark-x border-0")
+                                        
+                                            
+
+                                        div(class="mb-4")
+                                            label(for="Nombre" class="form-label text-light font-weight-bold")= "Nombre"
+                                            input(name="Nombre" type="text" placeholder="Ingrese su nombre" class="form-control bg-dark-x border-0")
+
+                                        div(class="mb-4")
+                                            label(for="Apellido" class="form-label text-light font-weight-bold")= "Apellido"
+                                            input(name="Apellido" type="text" placeholder="Ingrese su apellido" class="form-control bg-dark-x border-0")
+
+                                        div(class="mb-4")
+                                            label(for="Email" class="form-label text-light font-weight-bold")= "Email"
+                                            input(name="Email" type="text" placeholder="Ingrese su email" class="form-control bg-dark-x border-0")
+
+                                        div(class="mb-4")
+                                            label(for="Clave" class="form-label text-light font-weight-bold")= "Clave"
+                                            input(name="Clave" type="text" placeholder="Ingrese su clave" class="form-control bg-dark-x border-0")
+
+                                        div(class="mb-4")
+                                            label(for="Telefono" class="form-label text-light font-weight-bold")= "Telefono"
+                                            input(name="Telefono" type="text" placeholder="Ingrese su telefono" class="form-control bg-dark-x border-0")
+
+                                        div(class="mb-4")
+                                            label(for="Fecha_nac" class="form-label text-light font-weight-bold")= "Fecha de Nacimiento"
+                                            input(name="Fecha_Nac" type="date" placeholder="Ingrese su fecha de nacimiento" class="form-control bg-dark-x border-0")
+                                        
+                                        div(class="mb-4")
+                                            label(for="Interes" class="form-label text-light font-weight-bold")= "Interes"
+                                            textarea( cols="30", rows="5" name="Interes" placeholder="Ingrese sus interes" style="resize: none;" class="form-control bg-dark-x border-0")
+
+                                        div(class="mb-4")
+                                            label(for="Ciudad" class="form-label text-light font-weight-bold")= "Ciudad"
+                                            input(name="Ciudad" type="text" placeholder="Ingrese su Ciudad" class="form-control bg-dark-x border-0")
+
+
+
+                                        div(class=" p-3")
+                                            input(type="submit" id="btn-actualizar" value="Actualizar" class="btn btn-primary " ,style="margin-right: 4px;")
+
+
+
+                        div(class="col-sm-6")   
+                            div(class="container bg-dark")
+                                h5(class="p-2 align-selg-center text-light")= "Destacados de la semana"
+                                div(class="row")
+                                    div(class="column_fav")
+                                        a(href="") 
+                                            img(src="/img/49.jpg" id="myImg")
+                                        a(href="") 
+                                            img(src="/img/38.jpg" id="myImg")
+                                        a(href="") 
+                                            img(src="/img/18.jpg" id="myImg")
+                                        a(href="")     
+                                            img(src="/img/41.jpg" id="myImg")
+                                        a(href="")     
+                                            img(src="/img/14.jpg" id="myImg")
+                                        a(href="")     
+                                            img(src="/img/23.jpg" id="myImg")
+                                        a(href="")     
+                                            img(src="/img/7.jpg" id="myImg")
+                                br
+                                

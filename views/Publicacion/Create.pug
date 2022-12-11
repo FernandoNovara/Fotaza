@@ -1,0 +1,114 @@
+doctype html
+html(lang="en")
+    include ../Modulo/head.pug
+      
+    body 
+        div(class="d-flex")
+            div(id="sidebar-container" class="bg-dark")
+                div(class="px-lg-5 py-lg-4 p-3 ")
+                    a(href="/Home") 
+                        img(src="../img/Logo.png" id="Logo" class="img-fluid")
+
+                div(class="menu")
+                    br
+                    a(class="d-block  btn btn-dark text-light p-3",href="/Home")
+                        i(class="fas fa-home mr-2 lead")  
+                        = " Home"
+
+                    a(class="d-block   btn btn-dark text-light p-3",href="/Usuario")
+                        i(class="fas fa-user mr-2 lead")  
+                        = " Perfil"
+
+                    a(class=" btn btn-dark  d-block text-light p-3",href=("/Publicacion/Create")) 
+                        i(class="fas fa-upload mr-2 lead")  
+                        span(class="font-weight-bold")= " Subir una Imagen"
+
+
+            div(class="w-100")   
+                nav(class="navbar navbar-expand-sm navbar-light " id="navbar")
+                    div(class="container")
+                        form(class="d-flex form-inline position-relative my-2 d-inline-block")
+                            input(class="form-control" style="width: 400px; margin-left: 300px;" type="search" placeholder="Buscar" aria-label="Buscar")
+                            button(class="btn btn-success" style="margin-left: 4px; " type="submit")
+                                i(class="fas fa-search")
+
+                        div
+                            div(class="dropdown")
+                                button(class="btn btn-secondary dropdown-toggle" href="#" type="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false")
+                                    img(src="../img/Perfil.jpg" id="img-perfil" alt="")
+                                    = ` ${Usuario.Nombre} ${Usuario.Apellido}`
+
+                                ul(class="dropdown-menu" aria-labelledby="dropdownMenuLink")
+                                    li
+                                        a(class="dropdown-item" href="#")="Configuracion"
+                                    li
+                                        a(class="dropdown-item" href="/Salir")="Cerrar sesion"
+
+                div(id="content" )
+                    div(class="container bg-dark p-3 " id="contenedor-create")
+                        form(action="/Publicar/Private" method="POST" id="formulario" enctype="multipart/form-data")
+                            div(class="row")
+                            
+                                //- Cuerpo de la imagen
+
+                                div(class="col-sm-6" id="section-foto")
+                                    //- cargar imagen
+                                    div(id="image-container bg-dark")
+                                        div(class="bg-dark")
+                                            img(src="/img/Perfil.jpg" class="myImg"  id="image-create")
+                                        input(type="file" id="image"  name="image" accept="image/png,image/jpeg,image/jpg,image/webp,image/gif" onchange="preview(event)")
+                                        input(type="hidden" name="resolucion" id="resolucion" value="")
+                                    
+                                    //- cargar etiquetas
+                                    div(class="d-flex flex-column d-inline-block" id="cuerpo-descripcion")
+                                        label(for="etiquetas" class="form-label text-light font-weight-bold ")= "Etiquetas:" 
+                                            input(type="text" id="etiquetas" class=" text-light bg-dark", name="etiquetas" disabled)
+                                        br
+                                        div(class="container")
+                                            input(type="text", name="etiqueta" id="etiqueta" style="margin-right: 5px;")
+                                            input(type="button", value="Agregar etiquetas" id="btn-etiqueta" onclick="cargarEtiquetas()" class="btn btn-success")
+
+                                //- cuerpo de los comentarios 
+
+                                div(class="col-sm-6" id="section-comentarios")
+                                    div(class="container")
+                                        div(class="container bg-dark")
+                                            h1(class="text-light font-weight-bold")= "Datos Personales"
+                                            div
+                                                //- cargar Datos
+                                                div(class="mb-4")
+                                                    label(for="Titulo" class="form-label text-light font-weight-bold")= "Titulo"
+                                                    textarea(cols="30", rows="2" name="Titulo" type="text" placeholder="Ingrese su Titulo" class="form-control bg-dark-x border-0")
+
+                                                div(class="mb-4")
+                                                    label(for="Estado" class="form-label text-light font-weight-bold")= "Estado"
+                                                    select(name="Estado" id="Estado" onchange="cambiarEstado()" class="form-control text-dark bg-dark-x border-0")
+                                                        option(value="Protegido" selected)="Protegido"
+                                                        option(value="Publico")="Publico"
+                                                
+                                                div(class="mb-4")
+                                                    label(for="Derecho_Uso" class="form-label text-light font-weight-bold")= "Derechos de uso"
+                                                    select(name="Derecho_Uso" id="Derecho_Uso" onchange="cambiarDerecho()" class="form-control text-dark bg-dark-x border-0")
+                                                        option(value="Copyright" selected)="Copyright"
+                                                        option(value="Copyleft")="Copyleft"
+
+                                                div(class="mb-4")
+                                                    label(for="Categoria" class="form-label text-light font-weight-bold")= "Categoria"
+                                                    select(name="Categoria" class="form-control text-dark bg-dark-x border-0")
+                                                        option(value="Ninguno" selected)="Ninguno" 
+                                                        option(value="Colegio")="Colegio" 
+                                                        option(value="Juguetes")="Juguetes" 
+                                                        option(value="Animales")="Animales" 
+                                                        option(value="Alimentos")="Alimentos" 
+                                                        option(value="Ropa")="Ropa" 
+                                                        option(value="Transporte")="Transporte" 
+                                                        option(value="Oficios")="Oficios" 
+                                                        option(value="Partes del Cuerpo")="Partes del Cuerpo" 
+                                                        option(value="Muebles")="Muebles" 
+                                                        option(value="Instrumentos Musicales")="Instrumentos Musicales" 
+                                                        option(value="Flores")="Flores"
+
+                                                if Usuario 
+                                                    input(type="hidden" name="usuario_id" value=`${Usuario.id}`)
+                                                    
+                                    button(class="btn btn-success" id="btn-compartir" type="submit")="Compartir"    

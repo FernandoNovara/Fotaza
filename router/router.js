@@ -2,6 +2,7 @@
 
 const express = require('express'),
         router = express.Router(),
+        { multerDefaultStorage } = require("../helppers/multerConfig"),
         UsuarioControllers = require('../controllers/UsuarioControllers'),
         PublicacionControllers = require('../controllers/PublicacionControllers'),
         ComentarioControllers = require('../controllers/ComentarioControllers'),
@@ -18,7 +19,7 @@ const express = require('express'),
         
         // Home
         
-        .get('/Home',router_protect, (req,res)=>{ res.render("Home/Index",{Usuario: req.Usuario}) })
+        .get('/Home',router_protect, PublicacionControllers.showAll)
 
         // Usuario
 
@@ -32,13 +33,17 @@ const express = require('express'),
 
         //Publicacion
 
-        .get("/Public", (req,res)=> {res.render("Public/Public",{Usuario: req.Usuario})})
+        .get("/Public",router_protect , (req,res)=> {res.render("Public/Public",{Usuario: req.Usuario})})
 
-        .post("/Publicar",router_protect,PublicacionControllers.Publicar)
+        .get("/Publicacion/Create",router_protect, (req,res)=> {res.render("Publicacion/Create",{Usuario: req.Usuario})})
+
+        .post("/Publicar/Private",router_protect,multerDefaultStorage("private").single("image"),PublicacionControllers.Publicar)
+
+        .post("/Publicar/Publico",router_protect,multerDefaultStorage("public").single("image"),PublicacionControllers.Publicar)
 
         .get("/Publicacion",router_protect,PublicacionControllers.show)
 
-        .get("/Publicacion/showOne",router_protect,PublicacionControllers.showOne)
+        .get("/Publicacion/showOne/:id",router_protect,PublicacionControllers.showOne)
 
         .get("/Publicacion/show",router_protect,PublicacionControllers.showAll)
 
@@ -57,8 +62,6 @@ const express = require('express'),
         //Valoracion
 
         .post("/Valoracion/Create",router_protect,ValoracionControllers.create)
-
-        .get("/Valoracion/Delete/:id",router_protect,ValoracionControllers.delete)
 
         //Login
 

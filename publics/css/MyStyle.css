@@ -2,53 +2,98 @@
   overflow: hidden;
 }
 
-.container {
-  border-radius: 15px !important;
-}
-
-#Comentarios {
-  width: 100%;
-  height: 25rem;
-  margin-top: 20px;
-  border-radius: 5px;
-}
-
-#img01 {
+#myImg{
   flex: 50%;
   max-width: 100%;
   max-height: 100%;
   padding: 0 4px;
   border-radius: 15px;
 }
-#comentarios {
-  margin-right: 2px; 
+
+
+#ImgPerfil{
+  margin-left: 10rem;
 }
 
-#img-Comentarios {
+#img-Comentarios{
   width: 45px; 
   height: 45px; 
   border-radius: 25px;
 }
 
-.comentario-contenido {
-  height: min-content;
-  background-color: #ddd;
-  padding: 4px;
+#content-Comentarios {
   margin-top: 10px;
-  margin-bottom: 10px;
-  text-align: left;
-  display: block;
-  float: left;
-  border-radius: 5px;
-}
-
-.valoracion {
-  width: 150px;
-  height: 50px;
-  
 }
 
 #campo-comentario {
   resize: none;
-  
+}
+
+#ImgPerfil {
+  width: 200px;
+  height: 200px;
+  border-radius: 100%;
+}
+
+#btn-actualizar {
+  margin-left: 40%;
+}
+
+/* Vista publicacion create */
+
+#etiquetas {
+  width: 300px;
+  border-style: hidden;
+}
+
+#btn-compartir {
+  margin-left: 11rem;
+  width: 200px;
+  border-style: none;
+}
+
+#contenedor-create {
+  margin-top: 10px;
+  margin-left: 10px;
+  width: 98%;
+}
+
+#btn-create {
+  border-radius: 15px;
+  width: 35rem;
+  height: 20rem;
+}
+
+#image-create {
+  border-radius: 15px;
+  width: 100%;
+  height: 100%;
+}
+
+#titulo-create {
+  margin-top: 30px;
+}
+
+#Valoracion-create {
+  margin-top: 10px;
+}
+
+#contenedor {
+  border-radius: 5px;
+  width: 100%;
+  height: 375px; 
+  overflow-y: auto;
+}
+
+#Comentarios {
+  background-color: #ddd;
+  margin-left: 3px;
+  margin-top: 3px;
+  margin-right: 3px;
+  margin-bottom: 10px;
+  padding: 5px;
+  border-radius: 5px;
+  margin-left: 20px;
+  height: min-content;
+  width: 95%;
 }

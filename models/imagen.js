@@ -20,15 +20,15 @@ module.exports = (sequelize, DataTypes) => {
     },
     Tamaño: {
       type: DataTypes.STRING(100),
-      allowNull: false
+      allowNull: true
     },
     Formato: {
       type: DataTypes.STRING(100),
-      allowNull: false
+      allowNull: true
     },
     Resolucion: {
       type: DataTypes.STRING(100),
-      allowNull: false
+      allowNull: true
     },
     Derecho_Uso: {
       type: DataTypes.ENUM("Copyright","Copyleft"),

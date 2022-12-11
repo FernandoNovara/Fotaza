@@ -1,7 +1,7 @@
 'use strict'
-
-const { json } = require("sequelize")
-const { dbConfig } = require("../database/db_con")
+const { dbConfig } = require("../database/db_con"),
+                fs = require("fs"),
+     { minetypes } = require("../helppers/multerConfig")
 
 module.exports = {
 
@@ -34,13 +34,41 @@ module.exports = {
                 {
                     include: ["Imagenes","Valoraciones","Usuario","Comentario","Etiquetas"],
                     where: {
-                        id: req.body.id
+                        id: req.params.id
+                    }
+                }
+            )
+
+            const valorado = await dbConfig.Valoracion.findOne(
+                {
+                    where: {
+                        usuario_id: req.Usuario.id,
+                        publicacion_id: publicacion.id
                     }
                 }
             )
             
+            const sum = await dbConfig.Valoracion.sum("Estrellas",{
+                where: {
+                    publicacion_id: publicacion.id
+                }
+            })
+            const count = await dbConfig.Valoracion.count({
+                where: {
+                    publicacion_id: publicacion.id
+                }
+            })
+
+            const comentarios = await dbConfig.Comentario.findAll({
+                include: ["Usuario"],
+                where: {
+                    publicacion_id: publicacion.id
+                }
+            })
+
+
             if( publicacion )
-                res.json(publicacion)
+                res.render("Publicacion/View",{Publicacion: publicacion ,Usuario: req.Usuario, Sum: sum, Count: count, Valorado: valorado, Comentarios: comentarios})
             else
                 res.json("No se encontraron publicaciones")
 
@@ -59,7 +87,7 @@ module.exports = {
             )
             
             if( publicacion )
-                res.json(publicacion)
+                res.render("Home/Index",{Publicacion: publicacion ,Usuario: req.Usuario})
             else
                 res.json("No se encontraron publicaciones")
 
@@ -72,11 +100,11 @@ module.exports = {
         try {
             const Imagen = await dbConfig.Imagen.create(
                 {
-                    Nombre: req.body.Nombre,
+                    Nombre: req.file.filename,
                     Estado: req.body.Estado,
-                    Formato: req.body.Formato,
-                    Tamaño: req.body.Tamaño,
-                    Resolucion: req.body.Resolucion,
+                    Formato: req.file.mimetype,
+                    Tamaño: req.file.size,
+                    Resolucion: req.body.resolucion,
                     Derecho_Uso: req.body.Derecho_Uso,
                     usuario_id: req.body.usuario_id
                 }
@@ -86,7 +114,7 @@ module.exports = {
                 {
                     Titulo: req.body.Titulo,
                     Categoria: req.body.Categoria,
-                    Fecha_Creacion: req.body.Fecha_Creacion,
+                    Fecha_Creacion: Date.now(),
                     usuario_id: req.body.usuario_id,
                     imagen_id: Imagen.id,
                     Etiquetas: [
@@ -101,7 +129,7 @@ module.exports = {
             )
 
             if(Publicacion)
-                res.json(Publicacion)
+                res.redirect("/Home")
             else
                 res.json("No se pudo ingresar la publicacion")
         } catch (error) {

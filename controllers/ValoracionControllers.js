@@ -10,39 +10,16 @@ module.exports = {
                 {
                     Estrellas: req.body.Estrellas,  
                     publicacion_id: req.body.publicacion_id,
-                    usuario_id: req.body.usuario_id
+                    usuario_id: req.Usuario.id
                 }
             )
 
             if(valoracion)
-                res.json(valoracion)
+                res.redirect(`/Publicacion/showOne/${req.body.publicacion_id}`)
             else
                 res.json("No se pudo crear el comentario")
         } catch (error) {
             res.json(error)
         }
-    },
-
-    async delete(req,res){
-        try {
-
-            const valoracion = await dbConfig.Valoracion.destroy(
-                {
-                    where: {
-                        id: req.params.id
-                    }
-                }
-            )
-
-            if( valoracion )
-                res.json("Se ha eliminado el comentario")
-            else
-                res.json("No sea podido eliminar")
-            
-        }
-        catch (error) {
-            res.json(error)
-        }
     }
-
 }

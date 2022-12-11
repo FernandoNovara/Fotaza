@@ -6,7 +6,7 @@ module.exports = (sequelize, DataTypes) => {
 
     static associate(models) {
       Publicacion.belongsTo(models.Imagen, {as:"Imagenes" , foreignKey: "imagen_id", onDelete: "CASCADE"})
-      Publicacion.belongsTo(models.Usuario, {as:"Usuario"})
+      Publicacion.belongsTo(models.Usuario, {as:"Usuario", foreignKey: "usuario_id"})
       Publicacion.hasOne(models.Valoracion, {as: "Valoraciones", foreignKey: "publicacion_id" , onDelete: "CASCADE"})
       Publicacion.hasMany(models.Comentario, {as: "Comentario", foreignKey: "publicacion_id" , onDelete: "CASCADE"})
       Publicacion.hasMany(models.Etiqueta, {as: "Etiquetas", foreignKey: "publicacion_id" , onDelete: "CASCADE"})
