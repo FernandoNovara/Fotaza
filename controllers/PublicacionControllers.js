@@ -1,6 +1,9 @@
 'use strict'
+
 const { dbConfig } = require("../database/db_con"),
                 fs = require("fs"),
+            { Op, literal, where, Model } = require("sequelize"),
+     { Sequelize } = require("sequelize"),
      { minetypes } = require("../helppers/multerConfig")
 
 module.exports = {
@@ -12,15 +15,29 @@ module.exports = {
                 {
                     include: ["Imagenes","Valoraciones","Usuario","Comentario","Etiquetas"],
                     where: {
-                        usuario_id: req.body.usuario_id
+                        usuario_id: req.Usuario.id
                     }
                 }
             )
             
             if( publicacion )
-                res.json(publicacion)
+                res.render("Usuario/Usuario",{Publicacion: publicacion ,Usuario: req.Usuario})
             else
                 res.json("No se encontraron publicaciones")
+
+        } catch (error) {
+            res.json(error)
+        }
+    },
+
+    async showFeatured(req,res){
+        try {
+                
+
+                if( destacados )
+                    res.render("Home/Index",{Destacados: destacados ,Usuario: req.Usuario})
+                else
+                    res.json("No se encontraron publicaciones")
 
         } catch (error) {
             res.json(error)
@@ -77,17 +94,143 @@ module.exports = {
         }
     },
 
+    
+
     async showAll(req,res){
+        try {
+                //Publicaciones Home
+
+                const fecha = new Date();
+                fecha.setMonth(fecha.getMonth() - 12)
+
+                const publicacion = await dbConfig.Publicacion.findAll(
+                    {
+                        attributes: [[Sequelize.fn('DISTINCT', Sequelize.col('usuario_id')), 'usuario_id']],
+                        limit: 35,
+                        order: Sequelize.literal('rand()'),
+                        where: {
+                            Fecha_Creacion: {
+                                [Op.gt]: fecha
+                            }
+                        }
+                    }
+                ),
+
+                lista = []
+
+                for (let i = 0; i < publicacion.length; i++)
+                {
+                    const post = await dbConfig.Publicacion.findOne({
+                        include: ['Imagenes'],
+                        where: {
+                            usuario_id: publicacion[i].usuario_id
+                        }
+                    })
+                    lista.push(post) 
+                }
+
+                //Destacados
+
+                const fechaDestacados = new Date()
+                fechaDestacados.setMonth(fechaDestacados.getDay() - 7)
+
+                const listaDestacados = await dbConfig.Publicacion.findAll(
+                    {
+                        attributes: ["id"],
+                        limit: 5,
+                        where: {
+                            Fecha_Creacion: {
+                                [Op.gt]: fechaDestacados
+                            }
+                        }
+                    }
+                ),
+
+                filtro1 = [],
+                filtro2 = [],
+                destacados = []
+
+                for (let a = 0; a < listaDestacados.length; a++)
+                {
+                    const post = await dbConfig.Publicacion.findOne({
+                        include: ["Imagenes","Valoraciones","Usuario","Comentario","Etiquetas"],
+                        where: {
+                            id: listaDestacados[a].id
+                        }
+                    })
+                    filtro1.push(post) 
+                }
+
+                
+
+                for(let b = 0; b < filtro1.length; b++)
+                {
+                    const count = await dbConfig.Valoracion.findAndCountAll({
+                        attributes: [[Sequelize.fn('DISTINCT', Sequelize.col('publicacion_id')), 'publicacion_id']]
+                        ,where: {publicacion_id: filtro1[b].id}
+                        
+                    })
+                    if(count.count >= 3) //Regular la cantidad de valoraciones
+                    {
+                        filtro2.push(count.rows[0].publicacion_id)
+                    }
+                    
+                }
+
+                for (let c = 0; c < filtro2.length; c++)
+                {
+                    const sum = await dbConfig.Valoracion.sum("Estrellas",{
+                        where: {
+                            publicacion_id: filtro2[c]
+                        }
+                    })
+
+                    const count = await dbConfig.Valoracion.count({
+                        where: {
+                            publicacion_id: filtro2[c]
+                        }
+                    })
+
+                    if((sum/count) >= 4)// regular promedio
+                    {
+                        const post = await dbConfig.Publicacion.findOne({
+                            include: ["Imagenes","Valoraciones","Usuario","Comentario","Etiquetas"],
+                            where: {
+                                id: filtro2[c]
+                            }
+                        })
+                        destacados.push(post) 
+                    }
+
+
+                }
+                
+                if( publicacion )
+                    res.render("Home/Index",{Publicacion: lista ,Usuario: req.Usuario ,Destacados: destacados})
+                else
+                    res.json("No se encontraron publicaciones")
+
+        } catch (error) {
+            res.json(error)
+        }
+    },
+
+    async showAllPublic(req,res){
         try {
 
             const publicacion = await dbConfig.Publicacion.findAll(
                 {
-                    include: ["Imagenes","Valoraciones","Usuario","Comentario","Etiquetas"] 
+                    include: [{
+                        association: "Imagenes",
+                        where: {
+                            Estado: "Publico"
+                        }
+                    }]
                 }
             )
             
             if( publicacion )
-                res.render("Home/Index",{Publicacion: publicacion ,Usuario: req.Usuario})
+                res.render("Public/Public",{Publicacion: publicacion})
             else
                 res.json("No se encontraron publicaciones")
 

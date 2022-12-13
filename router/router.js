@@ -23,25 +23,19 @@ const express = require('express'),
 
         // Usuario
 
-        .get('/Usuario',router_protect, (req,res)=>{ res.render("Usuario/Usuario",{Usuario: req.Usuario}) })
+        .get('/Usuario',router_protect,router_protect,PublicacionControllers.show)
 
-        .post("/Registrarse",router_protect,UsuarioControllers.create)
-
-        .get("/Usuario/show/:id",router_protect,UsuarioControllers.show)
-
-        .post("/Usuario/Update",router_protect,UsuarioControllers.update)
+        .post("/Usuario/Update",router_protect,multerDefaultStorage("avatar").single("Avatar"),UsuarioControllers.update)
 
         //Publicacion
 
-        .get("/Public",router_protect , (req,res)=> {res.render("Public/Public",{Usuario: req.Usuario})})
+        .get("/Public", PublicacionControllers.showAllPublic)
 
         .get("/Publicacion/Create",router_protect, (req,res)=> {res.render("Publicacion/Create",{Usuario: req.Usuario})})
 
         .post("/Publicar/Private",router_protect,multerDefaultStorage("private").single("image"),PublicacionControllers.Publicar)
 
         .post("/Publicar/Publico",router_protect,multerDefaultStorage("public").single("image"),PublicacionControllers.Publicar)
-
-        .get("/Publicacion",router_protect,PublicacionControllers.show)
 
         .get("/Publicacion/showOne/:id",router_protect,PublicacionControllers.showOne)
 

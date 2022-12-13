@@ -19,7 +19,7 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false
     },
     Categoria: {
-      type: DataTypes.ENUM("Ninguno","Colegio","Juguetes","Animales","Alimentos","Ropa","Transporte","oficios","Partes del Cuerpo","Muebles","Instrumentos Musicales","Flores"), 
+      type: DataTypes.ENUM("Ninguno","Colegio","Juguetes","Animales","Alimentos","Ropa","Transporte","Oficios","Partes del Cuerpo","Muebles","Instrumentos Musicales","Flores"), 
       defaultValue: "Ninguno"
     },
     Fecha_Creacion: {

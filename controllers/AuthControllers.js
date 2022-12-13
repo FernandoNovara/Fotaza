@@ -72,7 +72,7 @@ module.exports = {
                         Fecha_Nac: req.body.Fecha_Nac,
                         Interes: req.body.Interes,
                         Ciudad: req.body.Ciudad,
-                        Avatar: "adawdasdawds" //req.file.filename,
+                        Avatar: "null" 
                     }
             )
 

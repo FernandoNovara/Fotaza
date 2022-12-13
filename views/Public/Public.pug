@@ -1,45 +1,30 @@
 doctype html
 html(lang="en")
     include ../Modulo/head.pug
+      
     body 
+        div(class="w-100")   
+            nav(class="navbar navbar-expand-sm navbar-light " id="navbar")
+                div(style="margin-left: 20px;")
+                    a(href="/") 
+                        img(src="../img/Logo.png" id="Logo" class="img-fluid")
 
-        include ../Modulo/sidebar.pug
+                div(class="container")
+                    form(class="d-flex form-inline position-relative my-2 d-inline-block")
+                        input(class="form-control" style="width: 400px; margin-left: 300px;" type="search" placeholder="Buscar" aria-label="Buscar")
+                        button(class="btn btn-success" style="margin-left: 4px; " type="submit")
+                            i(class="fas fa-search")
 
-            div(class="container bg-dark")
-                div(class="row")
-                    div(class="column")
-                        img(src="/img/28.jpg")
-                        img(src="/img/2.jpg")
-                        img(src="/img/3.jpg")
-                        img(src="/img/4.jpg")
-                        img(src="/img/5.jpg")
-                        img(src="/img/6.jpg")
-                        img(src="/img/7.jpg")
-                    div(class="column")
-                        img(src="/img/8.jpg")
-                        img(src="/img/29.jpg")
-                        img(src="/img/10.jpg")
-                        img(src="/img/11.jpg")
-                        img(src="/img/12.jpg")
-                        img(src="/img/30.jpg")
-                        img(src="/img/50.jpg")
-                    div(class="column")
-                        img(src="/img/14.jpg")
-                        img(src="/img/31.jpg")
-                        img(src="/img/16.jpg")
-                        img(src="/img/17.jpg")
-                        img(src="/img/18.jpg")
-                        img(src="/img/19.png")
-                        img(src="/img/20.jpg")
-                    div(class="column")
-                        img(src="/img/21.jpg")
-                        img(src="/img/22.jpg")
-                        img(src="/img/23.jpg")
-                        img(src="/img/24.jpg")
-                        img(src="/img/25.jpg")
-                        img(src="/img/26.png")
-                        img(src="/img/49.jpg")
+                    div
+                        a(href="/Login" class="btn btn-success" style="margin-right: 2px;")="Login" 
+                        a(href="/login/Registrarse" class="btn btn-success")="Registrase" 
 
-                br
-                br
-
+            div(id="content" )
+                div(class="container p-2")
+                    div(class="row")
+                        for val in Publicacion
+                            div(class="column-public")
+                                div(class="container-image")
+                                    img(src=`../public/${val.Imagenes.Nombre}` class="image")
+                        
+        

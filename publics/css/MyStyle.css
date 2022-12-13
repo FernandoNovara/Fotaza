@@ -68,6 +68,8 @@
   border-radius: 15px;
   width: 100%;
   height: 100%;
+  max-width: 600px;
+  max-height: 450px;
 }
 
 #titulo-create {
@@ -85,6 +87,8 @@
   overflow-y: auto;
 }
 
+/* Vista publicacion view */
+
 #Comentarios {
   background-color: #ddd;
   margin-left: 3px;
@@ -96,4 +100,26 @@
   margin-left: 20px;
   height: min-content;
   width: 95%;
+}
+
+#etiqueta {
+  margin-right: 5px; 
+  border-radius: 15px; 
+  width: 300px;
+}
+
+#image {
+  width: 100%;
+}
+
+/* Vista Perfil */
+
+#image-perfil {
+  border-radius: 5px;
+  width: 100%;
+  height: 100%;
+  max-width: 600px;
+  max-height: 450px;
+  margin-bottom: 10px;
+  margin-top: 10px;
 }

@@ -35,7 +35,7 @@ html(lang="en")
                             div(class="dropdown")
                                 button(class="btn btn-secondary dropdown-toggle" href="#" type="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false")
                                     img(src="../img/Perfil.jpg" id="img-perfil" alt="")
-                                    = " Fernando Novara"
+                                    = ` ${Usuario.Nombre} ${Usuario.Apellido}`
 
                                 ul(class="dropdown-menu" aria-labelledby="dropdownMenuLink")
                                     li
@@ -48,45 +48,46 @@ html(lang="en")
                             div(class="align-self-center")
                                 div(class="container bg-dark")
                                     h1(class="text-light font-weight-bold")= "Datos Personales"
-                                    form(action="" method="POST")
+                                    form(action="/Usuario/Update" method="POST" enctype="multipart/form-data")
 
-                                        div(class="mb-4")
-                                            img(src="/img/28.jpg" id="ImgPerfil" alt="")
-                                            //- input(type="file" id="archivo"  name="" class="form-control bg-dark-x border-0")
-                                        
-                                            
+                                        div(id="image-container bg-dark")
+                                            div(class="bg-dark")
+                                                input(type="file" id="image" class="btn btn-secondary"  name="Avatar" accept="image/png,image/jpeg,image/jpg,image/webp,image/gif" onchange="perfil(event)")
+                                                if(Usuario.Avatar != "null")
+                                                    img(src=`/avatar/${Usuario.Avatar}` id="image-perfil")
+                                                else 
+                                                    img(src="/img/Perfil.jpg" id="image-perfil")
 
                                         div(class="mb-4")
                                             label(for="Nombre" class="form-label text-light font-weight-bold")= "Nombre"
-                                            input(name="Nombre" type="text" placeholder="Ingrese su nombre" class="form-control bg-dark-x border-0")
+                                            input(name="Nombre" type="text" placeholder="Ingrese su nombre" class="form-control bg-dark-x border-0" value=`${Usuario.Nombre}`)
 
                                         div(class="mb-4")
                                             label(for="Apellido" class="form-label text-light font-weight-bold")= "Apellido"
-                                            input(name="Apellido" type="text" placeholder="Ingrese su apellido" class="form-control bg-dark-x border-0")
+                                            input(name="Apellido" type="text" placeholder="Ingrese su apellido" class="form-control bg-dark-x border-0" value=`${Usuario.Apellido}`)
 
                                         div(class="mb-4")
                                             label(for="Email" class="form-label text-light font-weight-bold")= "Email"
-                                            input(name="Email" type="text" placeholder="Ingrese su email" class="form-control bg-dark-x border-0")
-
-                                        div(class="mb-4")
-                                            label(for="Clave" class="form-label text-light font-weight-bold")= "Clave"
-                                            input(name="Clave" type="text" placeholder="Ingrese su clave" class="form-control bg-dark-x border-0")
+                                            input(name="Email" type="text" placeholder="Ingrese su email" class="form-control bg-dark-x border-0" value=`${Usuario.Email}`)
 
                                         div(class="mb-4")
                                             label(for="Telefono" class="form-label text-light font-weight-bold")= "Telefono"
-                                            input(name="Telefono" type="text" placeholder="Ingrese su telefono" class="form-control bg-dark-x border-0")
+                                            input(name="Telefono" type="text" placeholder="Ingrese su telefono" class="form-control bg-dark-x border-0" value=`${Usuario.Telefono}`)
 
                                         div(class="mb-4")
                                             label(for="Fecha_nac" class="form-label text-light font-weight-bold")= "Fecha de Nacimiento"
-                                            input(name="Fecha_Nac" type="date" placeholder="Ingrese su fecha de nacimiento" class="form-control bg-dark-x border-0")
+                                            input(name="Fecha_Nac" type="date" placeholder="Ingrese su fecha de nacimiento" class="form-control bg-dark-x border-0" value=`${Usuario.Fecha_Nac}`)
                                         
                                         div(class="mb-4")
                                             label(for="Interes" class="form-label text-light font-weight-bold")= "Interes"
-                                            textarea( cols="30", rows="5" name="Interes" placeholder="Ingrese sus interes" style="resize: none;" class="form-control bg-dark-x border-0")
+                                            input(type="text" name="Interes" placeholder="Ingrese sus interes" style="resize: none;" class="form-control bg-dark-x border-0" value=`${Usuario.Interes}`)
 
                                         div(class="mb-4")
                                             label(for="Ciudad" class="form-label text-light font-weight-bold")= "Ciudad"
-                                            input(name="Ciudad" type="text" placeholder="Ingrese su Ciudad" class="form-control bg-dark-x border-0")
+                                            if(Usuario.Ciudad == null)
+                                                input(name="Ciudad" type="text" placeholder="Ingrese su Ciudad" class="form-control bg-dark-x border-0" value="")
+                                            else
+                                                input(name="Ciudad" type="text" placeholder="Ingrese su Ciudad" class="form-control bg-dark-x border-0" value=`${Usuario.Ciudad}`)
 
 
 
@@ -100,19 +101,13 @@ html(lang="en")
                                 h5(class="p-2 align-selg-center text-light")= "Destacados de la semana"
                                 div(class="row")
                                     div(class="column_fav")
-                                        a(href="") 
-                                            img(src="/img/49.jpg" id="myImg")
-                                        a(href="") 
-                                            img(src="/img/38.jpg" id="myImg")
-                                        a(href="") 
-                                            img(src="/img/18.jpg" id="myImg")
-                                        a(href="")     
-                                            img(src="/img/41.jpg" id="myImg")
-                                        a(href="")     
-                                            img(src="/img/14.jpg" id="myImg")
-                                        a(href="")     
-                                            img(src="/img/23.jpg" id="myImg")
-                                        a(href="")     
-                                            img(src="/img/7.jpg" id="myImg")
+                                        if(Publicacion)
+                                            for val in Publicacion
+                                                a(href=`/Publicacion/showOne/${val.id}`)
+                                                    if(val.Imagenes.Estado == "Protegido")
+                                                        img(src=`/private/${val.Imagenes.Nombre}` id="myImg")
+                                                    if(val.Imagenes.Estado == "Publico")
+                                                        img(src=`/public/${val.Imagenes.Nombre}` id="myImg")
+
                                 br
                                 

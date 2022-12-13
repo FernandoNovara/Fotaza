@@ -56,17 +56,16 @@ html(lang="en")
                                     div(id="image-container bg-dark")
                                         div(class="bg-dark")
                                             img(src="/img/Perfil.jpg" class="myImg"  id="image-create")
-                                        input(type="file" id="image"  name="image" accept="image/png,image/jpeg,image/jpg,image/webp,image/gif" onchange="preview(event)")
-                                        input(type="hidden" name="resolucion" id="resolucion" value="")
+                                            input(type="hidden" name="resolucion" id="resolucion" value="")
+                                            input(type="file" id="image" class="text-light btn btn-secondary"  name="image" accept="image/png,image/jpeg,image/jpg,image/webp,image/gif" onchange="preview(event)")
+                                        
                                     
                                     //- cargar etiquetas
                                     div(class="d-flex flex-column d-inline-block" id="cuerpo-descripcion")
-                                        label(for="etiquetas" class="form-label text-light font-weight-bold ")= "Etiquetas:" 
-                                            input(type="text" id="etiquetas" class=" text-light bg-dark", name="etiquetas" disabled)
                                         br
                                         div(class="container")
-                                            input(type="text", name="etiqueta" id="etiqueta" style="margin-right: 5px;")
-                                            input(type="button", value="Agregar etiquetas" id="btn-etiqueta" onclick="cargarEtiquetas()" class="btn btn-success")
+                                            label(for="etiquetas" class="form-label text-light font-weight-bold ")= "Etiquetas:" 
+                                                input(type="text" name="Etiquetas" id="etiqueta" placeholder="  Viajes,Comercio,Fotos...")
 
                                 //- cuerpo de los comentarios 
 

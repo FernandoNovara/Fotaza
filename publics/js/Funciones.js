@@ -18,6 +18,20 @@ var preview = (event)=>{
     file_image.readAsDataURL(event.target.files[0])
 }
 
+var perfil = (event)=>{
+    var file_image = new FileReader()
+    var preview_img = document.getElementById('image-perfil')
+
+    file_image.onload = ()=>{
+        if(file_image.readyState == 2){
+            preview_img.src = file_image.result
+        }
+    }
+
+    file_image.readAsDataURL(event.target.files[0])
+}
+
+
 function cambiarEstado()
 {
     const estado = document.getElementById("Estado").value
@@ -70,13 +84,8 @@ function cargarEtiquetas()
 {
     const etiqueta = document.getElementById("etiqueta").value
     const listaEtiqueta = document.getElementById("etiquetas")
-
-    const cadena = listaEtiqueta.value.split(" ")
-    console.log(cadena.count)
-    if(cadena.count < 4 || cadena.count == undefined)
-        listaEtiqueta.value = listaEtiqueta.value + etiqueta + " "
-    else
-        alert("no se puede agregar mas etiquetas")
+    
+    listaEtiqueta.value = listaEtiqueta.value + etiqueta + " "
 
     document.getElementById("etiqueta").value = ""
 }
