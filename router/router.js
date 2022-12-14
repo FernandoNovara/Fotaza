@@ -27,7 +27,15 @@ const express = require('express'),
 
         .post("/Usuario/Update",router_protect,multerDefaultStorage("avatar").single("Avatar"),UsuarioControllers.update)
 
+        .post("/Usuario/Watermark",router_protect,multerDefaultStorage("watermark").single("watermark"),UsuarioControllers.addWatermark)
+
+        .post("/Usuario/Textomark",router_protect,UsuarioControllers.addWatermark)
+
+        .post("/Usuario/Delete",router_protect,UsuarioControllers.deleteWatermark)
+
         //Publicacion
+
+        .post("/Search",PublicacionControllers.search)
 
         .get("/Public", PublicacionControllers.showAllPublic)
 

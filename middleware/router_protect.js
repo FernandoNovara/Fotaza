@@ -13,7 +13,12 @@ module.exports = (req, res, next)=>{
                 if(err){
                     res.render('Error/error1020')
                 }else{
-                    dbConfig.Usuario.findByPk( decoded.Usuario.id ).then(
+                    dbConfig.Usuario.findOne({
+                        where:{
+                            id:decoded.Usuario.id 
+                        },
+                        include: ["valoraciones","watermark"]
+                    }).then(
                         Usuario => {
                             req.Usuario = Usuario
                             next()

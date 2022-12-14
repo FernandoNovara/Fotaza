@@ -34,7 +34,10 @@ html(lang="en")
                         div
                             div(class="dropdown")
                                 button(class="btn btn-secondary dropdown-toggle" href="#" type="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false")
-                                    img(src="../img/Perfil.jpg" id="img-perfil" alt="")
+                                    if(Usuario.Avatar == "null")
+                                        img(src=`/img/Perfil.jpg` id="img-perfil" alt="")
+                                    else
+                                        img(src=`/avatar/${Usuario.Avatar}` id="img-perfil" alt="")
                                     = ` ${Usuario.Nombre} ${Usuario.Apellido}`
 
                                 ul(class="dropdown-menu" aria-labelledby="dropdownMenuLink")
@@ -80,7 +83,11 @@ html(lang="en")
                                         
                                         div(class="mb-4")
                                             label(for="Interes" class="form-label text-light font-weight-bold")= "Interes"
-                                            input(type="text" name="Interes" placeholder="Ingrese sus interes" style="resize: none;" class="form-control bg-dark-x border-0" value=`${Usuario.Interes}`)
+                                            if(Usuario.Interes == null)
+                                                input(type="text" name="Interes" placeholder="Ingrese sus interes" style="resize: none;" class="form-control bg-dark-x border-0" )
+                                            else
+                                                input(type="text" name="Interes" placeholder="Ingrese sus interes" style="resize: none;" class="form-control bg-dark-x border-0" value=`${Usuario.Interes}`)
+
 
                                         div(class="mb-4")
                                             label(for="Ciudad" class="form-label text-light font-weight-bold")= "Ciudad"
@@ -93,12 +100,55 @@ html(lang="en")
 
                                         div(class=" p-3")
                                             input(type="submit" id="btn-actualizar" value="Actualizar" class="btn btn-primary " ,style="margin-right: 4px;")
-
+                            
+                            
+                            div(class="container bg-dark text-light p-3" id="container_watermark")
+                                if(!Usuario.watermark)            
+                                    form(action="/Usuario/Textomark" method="POST" id="formulario") 
+                                        h3 Marca de Agua Personalizada
+                                        div(class="mb-4")
+                                            label(class="form-label text-light font-weight-bold" for="Tipo")= "Tipo de Marca" 
+                                            select(class="form-control" name="Tipo" id="Tipo" onchange="cambiar()" required)
+                                                option(value="Imagen")="Imagen" 
+                                                option(value="Texto" selected)="Texto" 
+                                        
+                                        div(class="mb-4")
+                                            div(id="valor")
+                                                label(class="form-label text-light font-weight-bold" for="watermark")= "Introduce Un Texto"
+                                                input(class="form-control" type="text" name="watermark" id="watermark" required)
+                                        
+                                        div(class="mb-4")
+                                            div(id="boton")
+                                                button(class="btn btn-success" style="margin-left: 13.5rem;" type="submit")="Guardar"
+                                else
+                                    form(action="/Usuario/Delete" method="POST") 
+                                        if(Usuario.watermark.Tipo == "Imagen")
+                                            table 
+                                                tr
+                                                    th Mi marca de agua
+                                                tr 
+                                                    th
+                                                        img(style="width: 200px; height: 200px; border-radius: 25px; margin-left: 10rem;" src=`/watermark/${Usuario.watermark.Marca}`)
+                                                tr
+                                                    td 
+                                                        input(type="hidden" name="watermark_id" id="watermark_id" value=`${Usuario.watermark.id}`)
+                                                        button(class="btn btn-success" style='margin-left: 13.5rem; margin-top: 5px;' type="submit")="Borrar"
+                                        if(Usuario.watermark.Tipo == "Texto")
+                                            table
+                                                tr
+                                                    th Mi marca de agua
+                                                tr
+                                                    th
+                                                        h3= Usuario.watermark.Marca
+                                                tr
+                                                    td 
+                                                        input(class="btn btn-success" type="hidden" name="watermark_id" id="watermark_id" value=`${Usuario.watermark.id}`)
+                                                        button( class="btn btn-success" style='margin-left: 13.5rem;' type="submit")="Borrar"
 
 
                         div(class="col-sm-6")   
                             div(class="container bg-dark")
-                                h5(class="p-2 align-selg-center text-light")= "Destacados de la semana"
+                                h4(class="p-2 text-light")= "Mis Publicaciones"
                                 div(class="row")
                                     div(class="column_fav")
                                         if(Publicacion)
@@ -110,4 +160,44 @@ html(lang="en")
                                                         img(src=`/public/${val.Imagenes.Nombre}` id="myImg")
 
                                 br
-                                
+
+
+script. 
+            function cambiar(){
+                var Tipo = document.getElementById("Tipo").value
+                var valor = document.getElementById("valor")
+                var boton = document.getElementById("boton")
+
+                if(Tipo == "Imagen"){
+                    document.forms['formulario'].action = '/Usuario/Watermark'
+                    document.forms['formulario'].enctype = 'multipart/form-data'
+                    valor.innerHTML =   "<label class='form-label text-light font-weight-bold' for='watermark' id='imageLabel'>Cargar una Imagen</label>"
+                                        + "<input class='form-control' type='file' name='watermark' id='watermark' accept='image/png,image/jpeg,image/jpg' onchange='preview(event)' required>"
+                                        + "<br><br><div id='image-container'>"
+                                        +    "<img  src='/img/Perfil.jpg' style='width: 200px; height: 200px; border-radius: 25px; margin-left: 10rem;' id='image-preview'>"
+                                        + "</div>"
+                    boton.innerHTML = "<button class='btn btn-success' style='margin-left: 13.5rem;' type='submit'>Guardar</button>"
+                }
+
+                if(Tipo == "Texto"){
+                    document.forms['formulario'].action = '/Usuario/Textomark'
+                    document.forms['formulario'].enctype = 'application/x-www-form-urlencoded'
+                    valor.innerHTML = "<label class='form-label text-light font-weight-bold' for='watermark'>Introduce Un Texto</label>"
+                                        + "<input class='form-control' type='text' name='watermark' id='watermark' required>"
+                    boton.innerHTML = "<button class='btn btn-success' style='margin-left: 13.5rem;'  type='submit'>Guardar</button>"
+                }
+            }
+            var preview = (event)=>{
+                var imagen = document.getElementById('image-preview')
+
+                var file_image = new FileReader()
+                var preview_img = document.getElementById('image-preview')
+
+                file_image.onload = ()=>{
+                    if(file_image.readyState == 2){
+                        preview_img.src = file_image.result
+                    }
+                }
+
+                file_image.readAsDataURL(event.target.files[0])
+            }

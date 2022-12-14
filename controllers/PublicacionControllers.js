@@ -2,9 +2,10 @@
 
 const { dbConfig } = require("../database/db_con"),
                 fs = require("fs"),
-            { Op, literal, where, Model } = require("sequelize"),
+            { Op } = require("sequelize"),
      { Sequelize } = require("sequelize"),
-     { minetypes } = require("../helppers/multerConfig")
+     { minetypes } = require("../helppers/multerConfig"),
+         watermark = require("jimp-watermark")
 
 module.exports = {
 
@@ -24,20 +25,6 @@ module.exports = {
                 res.render("Usuario/Usuario",{Publicacion: publicacion ,Usuario: req.Usuario})
             else
                 res.json("No se encontraron publicaciones")
-
-        } catch (error) {
-            res.json(error)
-        }
-    },
-
-    async showFeatured(req,res){
-        try {
-                
-
-                if( destacados )
-                    res.render("Home/Index",{Destacados: destacados ,Usuario: req.Usuario})
-                else
-                    res.json("No se encontraron publicaciones")
 
         } catch (error) {
             res.json(error)
@@ -86,6 +73,7 @@ module.exports = {
 
             if( publicacion )
                 res.render("Publicacion/View",{Publicacion: publicacion ,Usuario: req.Usuario, Sum: sum, Count: count, Valorado: valorado, Comentarios: comentarios})
+                // res.json(comentarios)
             else
                 res.json("No se encontraron publicaciones")
 
@@ -170,7 +158,7 @@ module.exports = {
                         ,where: {publicacion_id: filtro1[b].id}
                         
                     })
-                    if(count.count >= 3) //Regular la cantidad de valoraciones
+                    if(count.count >= 1) //Regular la cantidad de valoraciones
                     {
                         filtro2.push(count.rows[0].publicacion_id)
                     }
@@ -206,7 +194,10 @@ module.exports = {
                 }
                 
                 if( publicacion )
-                    res.render("Home/Index",{Publicacion: lista ,Usuario: req.Usuario ,Destacados: destacados})
+                    if(destacados)
+                        res.render("Home/Index",{Publicacion: lista ,Usuario: req.Usuario ,Destacados: destacados})
+                    else
+                        res.render("Home/Index",{Publicacion: lista ,Usuario: req.Usuario})
                 else
                     res.json("No se encontraron publicaciones")
 
@@ -241,6 +232,44 @@ module.exports = {
 
     async Publicar(req,res){
         try {
+            if(req.body.Estado == "Publico"){
+                const options = {
+                    'ratio': 0.6,
+                    'opacity': 0.6,
+                    'dstPath': `./storage/public_watermark/${req.file.filename}`
+                }
+    
+                watermark.addWatermark(path.join(__dirname, `../storage/public/${req.file.filename}`), 
+                                        path.join(__dirname, `../publics/img/Watermark.png`), 
+                                        options)
+            }
+
+            if(req.body.Estado == "Protegido" && req.Usuario.watermark){
+                if(req.Usuario.watermark.Tipo == "Imagen"){
+                    const options = {
+                        'ratio': 0.6,
+                        'opacity': 0.6,
+                        'dstPath': `./storage/private/${req.file.filename}`
+                    }
+        
+                    watermark.addWatermark(path.join(__dirname, `../storage/private/${req.file.filename}`), 
+                                            path.join(__dirname, `../storage/watermark/${req.Usuario.watermark.Marca}`), 
+                                            options)
+                }
+
+                if(req.Usuario.watermark.Tipo == "Texto"){
+                    const options = {
+                        'text': req.Usuario.watermark.Marca,
+                        'textSize': 8,
+                        'dstPath': `./storage/private/${req.file.filename}`
+                    }
+        
+                    watermark.addTextWatermark(path.join(__dirname, `../storage/private/${req.file.filename}`), 
+                                            options)
+
+                }
+            }
+
             const Imagen = await dbConfig.Imagen.create(
                 {
                     Nombre: req.file.filename,
@@ -331,7 +360,7 @@ module.exports = {
                         id: req.params.id
                     }
                 }
-            ),
+            )
 
             deleteImg = await dbConfig.Imagen.destroy( { where: { id: Publicacion.imagen_id } } )
             
@@ -346,6 +375,48 @@ module.exports = {
         } catch (error) {
             res.json(error)
         }
-    }
+    },
+
+    async search(req,res){
+        try {
+            const buscar = await dbConfig.Etiqueta.findAll(
+                {
+                    include: ["Publicaciones"],
+                    where: {
+                        Nombre: {
+                            [Op.like]: "%"+req.body.search+"%"
+                          }
+                    }
+                }
+            )
+
+            const publicaciones = []
+
+            for(let a = 0; a < buscar.length; a++)
+            {
+                const post = await dbConfig.Publicacion.findOne(
+                    {
+                        include: [{
+                            association: "Imagenes",
+                            where: {
+                                Estado: "Publico"
+                            }
+                        }],
+                        where: {
+                            id: buscar[a].Publicaciones.id
+                        }
+                    }
+                )
+                publicaciones.push(post)
+            }
+
+            if(publicaciones)
+                res.render("Public/Public",{Publicacion: publicaciones})
+                // res.json(publicaciones)
+        } catch (error) {
+            res.json(error)
+        }
+    },
+
 
 }

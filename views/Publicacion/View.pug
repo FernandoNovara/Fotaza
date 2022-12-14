@@ -35,7 +35,10 @@ html(lang="en")
                         div
                             div(class="dropdown")
                                 button(class="btn btn-secondary dropdown-toggle" href="#" type="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false")
-                                    img(src="/img/Perfil.jpg" id="img-perfil" alt="")
+                                    if(Usuario.Avatar == "null")
+                                        img(src=`/img/Perfil.jpg` id="img-perfil" alt="")
+                                    else
+                                        img(src=`/avatar/${Usuario.Avatar}` id="img-perfil" alt="")
                                     = ` ${Usuario.Nombre} ${Usuario.Apellido}`
 
                                 ul(class="dropdown-menu" aria-labelledby="dropdownMenuLink")
@@ -85,9 +88,9 @@ html(lang="en")
                                     div(class="bg-light" id="contenedor")
                                         for val in Comentarios
                                             div(class="d-flex") 
-                                                img(src="/img/perfil.jpg", alt="" class="p-2" id="img-Comentarios")
+                                                img(src=`/avatar/${val.Usuario.Avatar}`, alt="" class="p-2" id="img-Comentarios")
                                                 div(id="content-Comentarios")=`${val.Usuario.Nombre} ${val.Usuario.Apellido}`
-                                            div( id="Comentarios")=`${val.Descripcion}`
+                                            div( id="Comentarios" title =`${val.Fecha.toDateString()}`)=`${val.Descripcion}`
 
                                     form(class="d-flex form-inline position-relative my-2 d-inline-block" action="/Comentario/Create" method="POST")
                                         textarea(name="Descripcion", cols="30", rows="2" class="form-control" id="campo-comentario" style="margin-right: 2px;")

@@ -35,7 +35,11 @@ html(lang="en")
                         div
                             div(class="dropdown")
                                 button(class="btn btn-secondary dropdown-toggle" href="#" type="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false")
-                                    img(src="../img/Perfil.jpg" id="img-perfil" alt="")
+                                    if(Usuario.Avatar == "null")
+                                        img(src=`/img/Perfil.jpg` id="img-perfil" alt="")
+                                    else
+                                        img(src=`/avatar/${Usuario.Avatar}` id="img-perfil" alt="")
+
                                     = ` ${Usuario.Nombre} ${Usuario.Apellido}`
 
                                 ul(class="dropdown-menu" aria-labelledby="dropdownMenuLink")

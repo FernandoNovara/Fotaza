@@ -123,3 +123,17 @@
   margin-bottom: 10px;
   margin-top: 10px;
 }
+
+/* Watermark Usuario */
+
+#container_watermark {
+  margin-top: 5px;
+}
+
+/* errores */
+
+#body401{
+  background: url("/img/401.jpg") no-repeat;
+  background-size: contain;
+  
+}

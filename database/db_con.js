@@ -45,6 +45,7 @@ class Connection{
         connection.Comentario = require("../models/comentario")(connection.init,DataTypes)
         connection.Etiqueta = require("../models/Etiqueta")(connection.init,DataTypes)
         connection.Imagen = require("../models/Imagen")(connection.init,DataTypes)
+        connection.Watermark = require("../models/Watermark")(connection.init,DataTypes)
         
 
 
@@ -55,6 +56,7 @@ class Connection{
         connection.Comentario.associate(connection)
         connection.Etiqueta.associate(connection)
         connection.Imagen.associate(connection)
+        connection.Watermark.associate(connection)
         
         
         return connection
