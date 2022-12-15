@@ -23,12 +23,16 @@ html(lang="en")
                         i(class="fas fa-upload mr-2 lead")  
                         span(class="font-weight-bold")= " Subir una Imagen"
 
+                    a(class=" btn btn-dark  d-block text-light p-3",href=("/Publicacion/Buscar")) 
+                        i(class="fas fa-search mr-2 lead")  
+                        span(class="font-weight-bold")= " Buscar"
+
 
             div(class="w-100")   
                 nav(class="navbar navbar-expand-sm navbar-light " id="navbar")
                     div(class="container")
-                        form(class="d-flex form-inline position-relative my-2 d-inline-block")
-                            input(class="form-control" style="width: 400px; margin-left: 300px;" type="search" placeholder="Buscar" aria-label="Buscar")
+                        form(action="/BuscarHome" method="POST" class="d-flex form-inline position-relative my-2 d-inline-block")
+                            input(class="form-control" style="width: 400px; margin-left: 300px;" type="search" name="search"  placeholder="Buscar" aria-label="Buscar")
                             button(class="btn btn-success" style="margin-left: 4px; " type="submit")
                                 i(class="fas fa-search")
 
@@ -76,7 +80,7 @@ html(lang="en")
                                 div(class="col-sm-6" id="section-comentarios")
                                     div(class="container")
                                         div(class="container bg-dark")
-                                            h1(class="text-light font-weight-bold")= "Datos Personales"
+                                            h1(class="text-light font-weight-bold")= "Datos de la publicacion"
                                             div
                                                 //- cargar Datos
                                                 div(class="mb-4")

@@ -1,5 +1,6 @@
 'use strict'
 
+const { response } = require("express")
 const { dbConfig } = require("../database/db_con"),
                 fs = require("fs"),
             { Op } = require("sequelize"),
@@ -81,8 +82,6 @@ module.exports = {
             res.json(error)
         }
     },
-
-    
 
     async showAll(req,res){
         try {
@@ -309,40 +308,55 @@ module.exports = {
         }
     },
 
-    async update(req,res){
+    async updateShow(req,res){
         try {
                 const publicacion = await dbConfig.Publicacion.findOne(
-                    {
-                        where: {
-                            id: req.body.id
-                        }
-                    }  
-                )
+                {
+                    include: ["Imagenes","Etiquetas"],
+                    where: {
+                        id: req.params.id
+                    }
+                }
+            )
+
+                if(publicacion)
+                    res.render("Publicacion/Update",{Publicacion: publicacion,Usuario: req.Usuario})
+                    // res.json(publicacion)
+                else
+                    res.json("No se pudo actualizar")
+
+        } catch (error) {
+            res.json(error)
+        }
+    },
+
+    async update(req,res){
+        try {
                 const updatePost = await dbConfig.Publicacion.update(
                     {
                         Titulo: req.body.Titulo,
-                        Categoria: req.body.Categoria
+                        Categoria: req.body.Categoria,
                     },
                     {
                         where: {
-                            id: req.body.id
+                            id: req.body.publicacion_id
                         }
-                    }    
-                )
-                const updateImg = await dbConfig.Imagen.update(
+                    }
+                ) 
+
+                const updateTag = await dbConfig.Etiqueta.update(
                     {
-                        Estado: req.body.Estado,
-                        Derecho_Uso: req.body.Derecho_Uso
+                        Nombre: req.body.Etiquetas
                     },
                     {
                         where: {
-                            id: publicacion.imagen_id
+                            id: req.body.etiqueta_id
                         }
-                    }    
+                    }
                 )
 
-                if(updatePost && updateImg)
-                    res.json("Se ha actualizado Correctamente")
+                if(updatePost)
+                    res.redirect("/Home")
                 else
                     res.json("No se pudo actualizar")
 
@@ -353,25 +367,37 @@ module.exports = {
 
     async delete(req,res){
         try {
-            const Publicacion = await dbConfig.Publicacion.findOne(
+            const publicacion = await dbConfig.Publicacion.findOne(
                 {
-                    attributes: ["imagen_id"],
+                    include: ["Imagenes"],
                     where: {
                         id: req.params.id
                     }
                 }
             )
-
-            deleteImg = await dbConfig.Imagen.destroy( { where: { id: Publicacion.imagen_id } } )
+            
+            if(publicacion.Imagenes.Estado == "Protegido"){
+                fs.unlinkSync(path.join(__dirname, `../storage/private/${publicacion.Imagenes.Nombre}`))
+            }
+                
+            if(publicacion.Imagenes.Estado == "Publico")
+            {
+                fs.unlinkSync(path.join(__dirname, `../storage/public/${publicacion.Imagenes.Nombre}`))
+                fs.unlinkSync(path.join(__dirname, `../storage/public_watermark/${publicacion.Imagenes.Nombre}`))
+            }
+                
             
 
+            const deleteImg = await dbConfig.Imagen.destroy( { where: { id: publicacion.Imagenes.id } } )
+            
             if(deleteImg)
-                res.json("Se elimino la publicacion")
-            else {
-                res.json("No sea podido eliminar la publicacion")
+            {
+                res.redirect("/Home")
             }
-
-
+            else
+            {
+                res.json("No sea podido eliminar")
+            }
         } catch (error) {
             res.json(error)
         }
@@ -391,32 +417,82 @@ module.exports = {
             )
 
             const publicaciones = []
+ 
 
             for(let a = 0; a < buscar.length; a++)
             {
                 const post = await dbConfig.Publicacion.findOne(
                     {
-                        include: [{
+                        include: {
                             association: "Imagenes",
                             where: {
                                 Estado: "Publico"
                             }
-                        }],
+                        },
                         where: {
                             id: buscar[a].Publicaciones.id
                         }
                     }
                 )
-                publicaciones.push(post)
+                if(post != null)
+                {
+                    publicaciones.push(post)
+                }
+                
             }
+
 
             if(publicaciones)
                 res.render("Public/Public",{Publicacion: publicaciones})
-                // res.json(publicaciones)
         } catch (error) {
             res.json(error)
         }
     },
 
+    async searchHome(req,res){
+        try {
+                const buscar = await dbConfig.Etiqueta.findAll(
+                    {
+                        include: ["Publicaciones"],
+                        where: {
+                            Nombre: {
+                                [Op.like]: "%"+req.body.search+"%"
+                            }
+                        }
+                    }
+                )
+
+                const publicaciones = []
+    
+
+                for(let a = 0; a < buscar.length; a++)
+                {
+                    const post = await dbConfig.Publicacion.findOne(
+                        {
+                            include: ["Imagenes","Valoraciones","Usuario","Comentario","Etiquetas"],
+                            where: {
+                                id: buscar[a].Publicaciones.id
+                            }
+                        }
+                    )
+                    if(post != null)
+                    {
+                        publicaciones.push(post)
+                    }
+                    
+                }     
+                     
+
+            if(buscar)
+            {
+                res.render("Publicacion/Buscar",{Publicacion: publicaciones, Usuario: req.Usuario})
+
+                // res.json(buscar)
+            }
+
+        } catch (error) {
+            res.json(error)
+        }
+    }
 
 }

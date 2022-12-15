@@ -132,8 +132,8 @@
 
 /* errores */
 
-#body401{
-  background: url("/img/401.jpg") no-repeat;
-  background-size: contain;
-  
+#dropdown{
+  margin-left: 30rem;
+
 }
+

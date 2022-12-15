@@ -23,7 +23,7 @@ html(lang="en")
                         i(class="fas fa-upload mr-2 lead")  
                         span(class="font-weight-bold")= " Subir una Imagen"
 
-                    a(class=" btn btn-dark  d-block text-light p-3",href=("/Buscar")) 
+                    a(class=" btn btn-dark  d-block text-light p-3",href=("/Publicacion/Buscar")) 
                         i(class="fas fa-search mr-2 lead")  
                         span(class="font-weight-bold")= " Buscar"
 
@@ -51,34 +51,16 @@ html(lang="en")
                                     li
                                         a(class="dropdown-item" href="/Salir")="Cerrar sesion"
                 div(id="content" )
-                    section
-                        div(class="container p-2")
-                            div(class="row")
-                                div(class="col-sm-8")
-                                    div(class="container bg-dark")
-                                        div(class="row ")
-                                            div(class="column")
-                                                if(Publicacion)
-                                                    for val in Publicacion
-                                                        a(href=`/Publicacion/showOne/${val.id}`)
-                                                            if(val.Imagenes.Estado == "Protegido")
-                                                                img(src=`/private/${val.Imagenes.Nombre}` id="myImg")
-                                                            if(val.Imagenes.Estado == "Publico")
-                                                                img(src=`/public/${val.Imagenes.Nombre}` id="myImg")
-
-                                        br
-                                        
-                                div(class="col-sm-4")   
-                                    div(class="container bg-dark")
-                                        h5(class="p-2 align-selg-center text-light")= "Destacados de la semana"
-                                        div(class="row")
-                                            div(class="column_fav")
-                                                if(Destacados)
-                                                    for des in Destacados
-                                                        a(href=`/Publicacion/showOne/${des.id}`)
-                                                            if(des.Imagenes.Estado == "Protegido")
-                                                                img(src=`/private/${des.Imagenes.Nombre}` id="myImg")
-                                                            if(des.Imagenes.Estado == "Publico")
-                                                                img(src=`/public/${des.Imagenes.Nombre}` id="myImg")
-                                        br
-                    
+                    div(class="container p-2")
+                        div(class="row")
+                            if(Publicacion)
+                                for val in Publicacion
+                                    div(class="column-public")
+                                        div(class="container-image")
+                                            a(href=`/Publicacion/showOne/${val.id}`)
+                                                if(val.Imagenes.Estado == "Protegido")
+                                                    img(src=`/private/${val.Imagenes.Nombre}` id="myImg")
+                                                if(val.Imagenes.Estado == "Publico")
+                                                    img(src=`/public/${val.Imagenes.Nombre}` id="myImg")
+                            else
+                                h3(style="margin-left: 25rem;")="No hay coincidencias"

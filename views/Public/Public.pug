@@ -22,9 +22,11 @@ html(lang="en")
             div(id="content" )
                 div(class="container p-2")
                     div(class="row")
-                        for val in Publicacion
-                            div(class="column-public")
-                                div(class="container-image")
-                                    img(src=`../public_watermark/${val.Imagenes.Nombre}` class="image")
-                        
+                        if(Publicacion[0] != null)
+                            for val in Publicacion
+                                div(class="column-public")
+                                    div(class="container-image")
+                                        img(src=`../public_watermark/${val.Imagenes.Nombre}` class="image")
+                        else
+                            h1(style="margin-left: 25rem;")="No hay coincidencias"
         

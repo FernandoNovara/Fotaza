@@ -41,9 +41,17 @@ const express = require('express'),
 
         .get("/Publicacion/Create",router_protect, (req,res)=> {res.render("Publicacion/Create",{Usuario: req.Usuario})})
 
+        .get("/Publicacion/Update/:id",router_protect,PublicacionControllers.updateShow)
+
+        .post("/Publicacion/Update",router_protect,PublicacionControllers.update)
+
         .post("/Publicar/Private",router_protect,multerDefaultStorage("private").single("image"),PublicacionControllers.Publicar)
 
         .post("/Publicar/Publico",router_protect,multerDefaultStorage("public").single("image"),PublicacionControllers.Publicar)
+
+        .post("/BuscarHome",router_protect,PublicacionControllers.searchHome)
+
+        .get("/Buscar",router_protect,(req,res)=> {res.render("Publicacion/Buscar",{Usuario: req.Usuario})})
 
         .get("/Publicacion/showOne/:id",router_protect,PublicacionControllers.showOne)
 
@@ -51,15 +59,9 @@ const express = require('express'),
 
         .get("/Publicacion/Delete/:id",router_protect,PublicacionControllers.delete)
 
-        .post("/Publicacion/Update",router_protect,PublicacionControllers.update)
-
         //Comentarios
 
         .post("/Comentario/Create",router_protect,ComentarioControllers.create)
-
-        .get("/Comentario/Delete/:id",router_protect,ComentarioControllers.delete)
-
-        .post("/Comentario/Update",router_protect,ComentarioControllers.update)
 
         //Valoracion
 

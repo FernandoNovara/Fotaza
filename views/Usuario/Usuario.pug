@@ -23,11 +23,16 @@ html(lang="en")
                         span(class="font-weight-bold")= " Subir una Imagen"
 
 
+                    a(class=" btn btn-dark  d-block text-light p-3",href=("/Publicacion/Buscar")) 
+                        i(class="fas fa-search mr-2 lead")  
+                        span(class="font-weight-bold")= " Buscar"
+
+
             div(class="w-100")   
                 nav(class="navbar navbar-expand-sm navbar-light " id="navbar")
                     div(class="container")
-                        form(class="d-flex form-inline position-relative my-2 d-inline-block")
-                            input(class="form-control" style="width: 400px; margin-left: 300px;" type="search" placeholder="Buscar" aria-label="Buscar")
+                        form(action="/BuscarHome" method="POST" class="d-flex form-inline position-relative my-2 d-inline-block")
+                            input(class="form-control" style="width: 400px; margin-left: 300px;" type="search" name="search" placeholder="Buscar" aria-label="Buscar")
                             button(class="btn btn-success" style="margin-left: 4px; " type="submit")
                                 i(class="fas fa-search")
 
@@ -108,7 +113,7 @@ html(lang="en")
                                         h3 Marca de Agua Personalizada
                                         div(class="mb-4")
                                             label(class="form-label text-light font-weight-bold" for="Tipo")= "Tipo de Marca" 
-                                            select(class="form-control" name="Tipo" id="Tipo" onchange="cambiar()" required)
+                                            select(class="form-control" name="Tipo" id="Tipo" onchange="cambiarWatermark()" required)
                                                 option(value="Imagen")="Imagen" 
                                                 option(value="Texto" selected)="Texto" 
                                         
@@ -161,43 +166,4 @@ html(lang="en")
 
                                 br
 
-
-script. 
-            function cambiar(){
-                var Tipo = document.getElementById("Tipo").value
-                var valor = document.getElementById("valor")
-                var boton = document.getElementById("boton")
-
-                if(Tipo == "Imagen"){
-                    document.forms['formulario'].action = '/Usuario/Watermark'
-                    document.forms['formulario'].enctype = 'multipart/form-data'
-                    valor.innerHTML =   "<label class='form-label text-light font-weight-bold' for='watermark' id='imageLabel'>Cargar una Imagen</label>"
-                                        + "<input class='form-control' type='file' name='watermark' id='watermark' accept='image/png,image/jpeg,image/jpg' onchange='preview(event)' required>"
-                                        + "<br><br><div id='image-container'>"
-                                        +    "<img  src='/img/Perfil.jpg' style='width: 200px; height: 200px; border-radius: 25px; margin-left: 10rem;' id='image-preview'>"
-                                        + "</div>"
-                    boton.innerHTML = "<button class='btn btn-success' style='margin-left: 13.5rem;' type='submit'>Guardar</button>"
-                }
-
-                if(Tipo == "Texto"){
-                    document.forms['formulario'].action = '/Usuario/Textomark'
-                    document.forms['formulario'].enctype = 'application/x-www-form-urlencoded'
-                    valor.innerHTML = "<label class='form-label text-light font-weight-bold' for='watermark'>Introduce Un Texto</label>"
-                                        + "<input class='form-control' type='text' name='watermark' id='watermark' required>"
-                    boton.innerHTML = "<button class='btn btn-success' style='margin-left: 13.5rem;'  type='submit'>Guardar</button>"
-                }
-            }
-            var preview = (event)=>{
-                var imagen = document.getElementById('image-preview')
-
-                var file_image = new FileReader()
-                var preview_img = document.getElementById('image-preview')
-
-                file_image.onload = ()=>{
-                    if(file_image.readyState == 2){
-                        preview_img.src = file_image.result
-                    }
-                }
-
-                file_image.readAsDataURL(event.target.files[0])
-            }
+            
