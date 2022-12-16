@@ -5,6 +5,10 @@ const { dbConfig } = require( '../database/db_con' ),
 
 module.exports = {
 
+    // ---------------------------------------------
+    //  Iniciar Sesion
+    // ---------------------------------------------
+
     async login( req,res ){
         try {
             const {Email, Clave} = req.body
@@ -18,7 +22,7 @@ module.exports = {
 
             
             if( !Usuario ){
-                res.render( 'Login/Login', {error: 'Login'} )
+                res.render( 'Login/Login', {error: 'Login',MyTitle: "Login"} )
             }else{
                 if( bcrypt.compareSync( Clave, Usuario.Clave ) ){
 
@@ -39,7 +43,7 @@ module.exports = {
                     res.redirect( '/Home' ) 
 
                 }else{
-                    res.render( 'Login/Login',{ error: 'Clave' } )
+                    res.render( 'Login/Login',{ error: 'Clave',MyTitle: "Login"} )
                 }
             }
 
@@ -48,7 +52,21 @@ module.exports = {
         }
     },
 
+    // ---------------------------------------------
+    // Registrarse
+    // ---------------------------------------------
+
     async signup( req,res ){
+
+        const fecha = new Date(), 
+        fecha_nacimiento = new Date(req.body.Fecha_Nac)
+        fecha.setFullYear(fecha.getFullYear() - 18)
+
+        if( fecha_nacimiento > fecha ){
+            return res.render( 'Login/Registrarse', { error: 'fecha' } )
+        }
+
+
         const existUsuario = await dbConfig.Usuario.findOne( 
             {
                 where: {
@@ -58,7 +76,7 @@ module.exports = {
         )
         
         if( existUsuario ){
-            res.render( 'Login/Registrarse', { existUsuario: true } )
+            res.render( 'Login/Registrarse', { existUsuario: true ,MyTitle: "Registrarse"} )
         }else{
             const hash = bcrypt.hashSync( req.body.Clave, parseInt( authConf.round ) )
         
@@ -77,7 +95,7 @@ module.exports = {
             )
 
             if( usuario ){
-                return res.render( 'Login/Login', {registro: true} )
+                return res.render( 'Login/Login', {registro: true,MyTitle: "Login"} )
             }
         }
         

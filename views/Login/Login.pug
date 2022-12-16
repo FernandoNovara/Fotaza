@@ -38,11 +38,11 @@ html(lang="en")
                         form(method="POST" action="/Login" class="mb-5")
                             div(class="mb-4")
                                 label(for="Email" class="form-label text-light font-weight-bold")= "Email"
-                                input(name="Email" type="text" placeholder="Ingrese su email" class="form-control bg-dark-x border-0")
+                                input(name="Email" type="text" placeholder="Ingrese su email" class="form-control bg-dark-x border-0" required)
 
                             div(class="mb-3")
                                 label(for="Clave" class="form-label text-light font-weight-bold")= "Clave"
-                                input(name="Clave" type="password" placeholder="Ingrese su clave" class="form-control form-control bg-dark-x border-0")
+                                input(name="Clave" type="password" placeholder="Ingrese su clave" class="form-control form-control bg-dark-x border-0" required)
 
                             div
                                 input(type="submit" value="Iniciar sesión" class="btn btn-primary")

@@ -10,6 +10,10 @@ const { dbConfig } = require("../database/db_con"),
 
 module.exports = {
 
+    // ---------------------------------------------
+    // Mostrar mis publicaciones
+    // ---------------------------------------------
+
     async show(req,res){
         try {
 
@@ -23,7 +27,7 @@ module.exports = {
             )
             
             if( publicacion )
-                res.render("Usuario/Usuario",{Publicacion: publicacion ,Usuario: req.Usuario})
+                res.render("Usuario/Usuario",{Publicacion: publicacion ,Usuario: req.Usuario,MyTitle: "Perfil"})
             else
                 res.json("No se encontraron publicaciones")
 
@@ -31,6 +35,10 @@ module.exports = {
             res.json(error)
         }
     },
+
+    // ---------------------------------------------
+    // Mostrar una publicacion
+    // ---------------------------------------------
 
     async showOne(req,res){
         try {
@@ -73,7 +81,7 @@ module.exports = {
 
 
             if( publicacion )
-                res.render("Publicacion/View",{Publicacion: publicacion ,Usuario: req.Usuario, Sum: sum, Count: count, Valorado: valorado, Comentarios: comentarios})
+                res.render("Publicacion/View",{Publicacion: publicacion ,Usuario: req.Usuario, Sum: sum, Count: count, Valorado: valorado, Comentarios: comentarios,MyTitle: "Publicacion"})
                 // res.json(comentarios)
             else
                 res.json("No se encontraron publicaciones")
@@ -82,6 +90,10 @@ module.exports = {
             res.json(error)
         }
     },
+
+    // ---------------------------------------------
+    // Mostrar todas las publicaciones en Home
+    // ---------------------------------------------
 
     async showAll(req,res){
         try {
@@ -194,7 +206,7 @@ module.exports = {
                 
                 if( publicacion )
                     if(destacados)
-                        res.render("Home/Index",{Publicacion: lista ,Usuario: req.Usuario ,Destacados: destacados})
+                        res.render("Home/Index",{Publicacion: lista ,Usuario: req.Usuario ,Destacados: destacados,MyTitle: "Home"})
                     else
                         res.render("Home/Index",{Publicacion: lista ,Usuario: req.Usuario})
                 else
@@ -204,6 +216,10 @@ module.exports = {
             res.json(error)
         }
     },
+
+    // ---------------------------------------------
+    // Mostrar Todas las Publicaciones Publicas
+    // ---------------------------------------------
 
     async showAllPublic(req,res){
         try {
@@ -220,7 +236,7 @@ module.exports = {
             )
             
             if( publicacion )
-                res.render("Public/Public",{Publicacion: publicacion})
+                res.render("Public/Public",{Publicacion: publicacion,MyTitle: "Publicaciones Publicas"})
             else
                 res.json("No se encontraron publicaciones")
 
@@ -228,6 +244,10 @@ module.exports = {
             res.json(error)
         }
     },
+
+    // ---------------------------------------------
+    // Crear una Publicacion
+    // ---------------------------------------------
 
     async Publicar(req,res){
         try {
@@ -290,7 +310,7 @@ module.exports = {
                     imagen_id: Imagen.id,
                     Etiquetas: [
                         { 
-                            Nombre: req.body.Etiquetas
+                            Nombre: req.body.Etiquetas.toLowerCase()
                         }]
                 },
                 {
@@ -308,6 +328,10 @@ module.exports = {
         }
     },
 
+    // ---------------------------------------------
+    // Mostrar una publicacion para actualizar
+    // ---------------------------------------------
+
     async updateShow(req,res){
         try {
                 const publicacion = await dbConfig.Publicacion.findOne(
@@ -320,7 +344,7 @@ module.exports = {
             )
 
                 if(publicacion)
-                    res.render("Publicacion/Update",{Publicacion: publicacion,Usuario: req.Usuario})
+                    res.render("Publicacion/Update",{Publicacion: publicacion,Usuario: req.Usuario,MyTitle: "Actualizar Publicacion"})
                     // res.json(publicacion)
                 else
                     res.json("No se pudo actualizar")
@@ -329,6 +353,10 @@ module.exports = {
             res.json(error)
         }
     },
+
+    // ---------------------------------------------
+    // Actulizar una publicacion
+    // ---------------------------------------------
 
     async update(req,res){
         try {
@@ -346,7 +374,7 @@ module.exports = {
 
                 const updateTag = await dbConfig.Etiqueta.update(
                     {
-                        Nombre: req.body.Etiquetas
+                        Nombre: req.body.Etiquetas.toLowerCase()
                     },
                     {
                         where: {
@@ -364,6 +392,10 @@ module.exports = {
             res.json(error)
         }
     },
+
+    // ---------------------------------------------
+    // Eliminar Una publicacion
+    // ---------------------------------------------
 
     async delete(req,res){
         try {
@@ -403,6 +435,10 @@ module.exports = {
         }
     },
 
+    // ---------------------------------------------
+    // Buscar Una publicacion publica
+    // ---------------------------------------------
+
     async search(req,res){
         try {
             const buscar = await dbConfig.Etiqueta.findAll(
@@ -410,7 +446,7 @@ module.exports = {
                     include: ["Publicaciones"],
                     where: {
                         Nombre: {
-                            [Op.like]: "%"+req.body.search+"%"
+                            [Op.like]: "%"+req.body.search.toLowerCase()+"%"
                           }
                     }
                 }
@@ -443,11 +479,15 @@ module.exports = {
 
 
             if(publicaciones)
-                res.render("Public/Public",{Publicacion: publicaciones})
+                res.render("Public/Public",{Publicacion: publicaciones,MyTitle: "Buscar Publicaciones"})
         } catch (error) {
             res.json(error)
         }
     },
+
+    // ---------------------------------------------
+    // Buscar una publicacion de home
+    // ---------------------------------------------
 
     async searchHome(req,res){
         try {
@@ -456,7 +496,7 @@ module.exports = {
                         include: ["Publicaciones"],
                         where: {
                             Nombre: {
-                                [Op.like]: "%"+req.body.search+"%"
+                                [Op.like]: "%"+req.body.search.toLowerCase()+"%"
                             }
                         }
                     }
@@ -485,7 +525,7 @@ module.exports = {
 
             if(buscar)
             {
-                res.render("Publicacion/Buscar",{Publicacion: publicaciones, Usuario: req.Usuario})
+                res.render("Publicacion/Buscar",{Publicacion: publicaciones, Usuario: req.Usuario,MyTitle: "Buscar Publicacion"})
 
                 // res.json(buscar)
             }

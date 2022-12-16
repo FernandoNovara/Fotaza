@@ -4,14 +4,14 @@ const jwt = require('jsonwebtoken'),
 
 module.exports = (req, res, next)=>{
         if( !req.cookies['x-access-token']){
-            res.render('Error/error401', {msg: 'Acceso no autorizado'})
+            res.render('Error/error401', {msg: 'Acceso no autorizado',MyTitle: "Error 401"})
         }else{
             //comprobar la validez del token
             const token = req.cookies['x-access-token']
             
             jwt.verify(token, authConfig.secret, (err, decoded)=>{
                 if(err){
-                    res.render('Error/error1020')
+                    res.render('Error/error1020',{MyTitle: "Error 1020"})
                 }else{
                     dbConfig.Usuario.findOne({
                         where:{

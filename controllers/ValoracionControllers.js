@@ -4,6 +4,11 @@ const { dbConfig } = require("../database/db_con")
 
 module.exports = {
 
+
+    // ---------------------------------------------
+    // Crear una valoracion
+    // ---------------------------------------------    
+
     async create(req,res){
         try {
             const valoracion = await dbConfig.Valoracion.create(

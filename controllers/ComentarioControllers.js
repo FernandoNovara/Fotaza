@@ -5,6 +5,10 @@ const { dbConfig } = require("../database/db_con")
 
 module.exports = {
 
+    // ---------------------------------------------
+    // Crear una comentario
+    // ---------------------------------------------
+
     async create(req,res){
         try {
             const comentario = await dbConfig.Comentario.create(

@@ -30,7 +30,7 @@ html(lang="en")
 
                 div(class="col-sm-5 d-flex flex-column align-items-end min-vh-95")
                     div(class="px-lg-5 py-lg-4 p-4 w-100 align-self-center")
-
+                        div(id="error" class="text-dark" style="width: 300px;")
                         h1(class="text-light font-weight-bold")= "Registrarse"
                         form(action="/Login/Registrarse" method="POST")
 
@@ -44,11 +44,11 @@ html(lang="en")
 
                             div(class="mb-4")
                                 label(for="Email" class="form-label text-light font-weight-bold")= "Email"
-                                input(name="Email" type="text" placeholder="Ingrese su email" class="form-control bg-dark-x border-0")
+                                input(name="Email" type="text" placeholder="Ingrese su email" class="form-control bg-dark-x border-0" required)
 
                             div(class="mb-4")
                                 label(for="Clave" class="form-label text-light font-weight-bold")= "Clave"
-                                input(name="Clave" type="text" placeholder="Ingrese su clave" class="form-control bg-dark-x border-0")
+                                input(name="Clave" type="text" placeholder="Ingrese su clave" class="form-control bg-dark-x border-0" required)
 
                             div(class="mb-4")
                                 label(for="Telefono" class="form-label text-light font-weight-bold")= "Telefono"
@@ -62,3 +62,8 @@ html(lang="en")
                                 a(href="/" class="btn btn-success p-3" ,style="margin-right: 4px;")
                                     i(class="fa fa-reply")
                                 input(type="submit" value="Registrarse" class="btn btn-primary" ,style="margin-right: 4px;")
+
+            if(error == "fecha")
+                script.
+                    var error = document.getElementById("error")
+                    error.innerHTML = "<p style='margin-left:20px; border-radius: 5px; background-color: #ddd;'>Usted no es mayor de 18 años </p>"

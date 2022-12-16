@@ -11,7 +11,7 @@ const express = require('express'),
         router_protect = require('../middleware/router_protect'),
         { error404 } = require('../helppers/errores')
 
-        router.get('/', (req,res)=>{ res.render("Login/Login") })
+        router.get('/', (req,res)=>{ res.render("Login/Login",{MyTitle: "Login"}) })
                 .get("/Salir" , (req,res) => {
                         res.clearCookie("x-access-token")
                         res.redirect("/Login")
@@ -39,7 +39,7 @@ const express = require('express'),
 
         .get("/Public", PublicacionControllers.showAllPublic)
 
-        .get("/Publicacion/Create",router_protect, (req,res)=> {res.render("Publicacion/Create",{Usuario: req.Usuario})})
+        .get("/Publicacion/Create",router_protect, (req,res)=> {res.render("Publicacion/Create",{Usuario: req.Usuario,MyTitle: "Crear Publicacion"})})
 
         .get("/Publicacion/Update/:id",router_protect,PublicacionControllers.updateShow)
 
@@ -51,7 +51,7 @@ const express = require('express'),
 
         .post("/BuscarHome",router_protect,PublicacionControllers.searchHome)
 
-        .get("/Buscar",router_protect,(req,res)=> {res.render("Publicacion/Buscar",{Usuario: req.Usuario})})
+        .get("/Buscar",router_protect,(req,res)=> {res.render("Publicacion/Buscar",{Usuario: req.Usuario,MyTitle: "Buscar Publicaciones"})})
 
         .get("/Publicacion/showOne/:id",router_protect,PublicacionControllers.showOne)
 
@@ -69,9 +69,9 @@ const express = require('express'),
 
         //Login
 
-        .get('/Login', (req,res)=>{ res.render("Login/Login") })
+        .get('/Login', (req,res)=>{ res.render("Login/Login",{MyTitle: "Login"}) })
 
-        .get('/Login/Registrarse', (req,res)=>{ res.render("Login/Registrarse") })
+        .get('/Login/Registrarse', (req,res)=>{ res.render("Login/Registrarse",{MyTitle: "Registrarse"})})
 
         .post("/Login",AuthControllers.login)
 

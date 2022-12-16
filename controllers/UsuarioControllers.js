@@ -7,6 +7,10 @@ const { dbConfig } = require("../database/db_con"),
 
 module.exports = {
 
+    // ---------------------------------------------
+    // Actualizar datos de perfil
+    // ---------------------------------------------
+
     async update(req,res){
 
         const avatarUsuario = await dbConfig.Usuario.findOne({
@@ -46,6 +50,10 @@ module.exports = {
             res.json({error: "No se encontro ningun dato"})
     },
 
+    // ---------------------------------------------
+    // Crear una marca de agua Texto/Imagen
+    // ---------------------------------------------
+
     async addWatermark(req,res){
         try {
             const watermark = await dbConfig.Watermark.create(
@@ -65,6 +73,10 @@ module.exports = {
         }
 
     },
+
+    // ---------------------------------------------
+    // Eliminar Marca de agua
+    // ---------------------------------------------
 
     async deleteWatermark(req,res){
         try {
